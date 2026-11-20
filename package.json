@@ -1,0 +1,15 @@
+{
+  "name": "cross-figma-directory",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Figma Directory for Cross \u00b7 Core Hygiene Journeys. Static site; the content lives in directory.json.",
+  "type": "module",
+  "scripts": {
+    "dev": "node dev.mjs",
+    "build": "node build.mjs",
+    "check": "node build.mjs --check"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

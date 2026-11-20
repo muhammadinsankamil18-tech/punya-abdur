@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Figma Directory · Cross Core Hygiene Journeys</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231E22AA'/%3E%3Ccircle cx='23' cy='23' r='4' fill='%23E5005A'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/assets/xlsmart-tokens.css">
+<script>
+  // Point the runtime at the local React copies instead of unpkg.
+  window.__resources = {
+    "https://unpkg.com/react@18.3.1/umd/react.production.min.js": "/assets/vendor/react.production.min.js",
+    "https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js": "/assets/vendor/react-dom.production.min.js"
+  };
+</script>
+<script src="/assets/vendor/react.production.min.js"></script>
+<script src="/assets/vendor/react-dom.production.min.js"></script>
+<script src="/assets/xlsmart-ds.js"></script>
+<script src="/assets/dc-runtime.js"></script>
+</head>
+<body>
+
+<x-dc>
+<helmet>
+  <style>
+    body{margin:0;background:#F3F4F6;font-family:var(--font-sans);color:var(--fg-1);}
+    a{color:var(--xs-blue-800);} a:hover{color:var(--xs-blue-700);}
+  </style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-direction:column;background:var(--surface-muted,#F3F4F6);font-family:var(--font-sans);">
+  <header style="background:#fff;border-bottom:1px solid var(--border-subtle,#E5E7EB);padding:20px 32px;display:flex;flex-wrap:wrap;align-items:center;gap:16px 24px;">
+    <div style="display:flex;flex-direction:column;gap:2px;flex:1 1 260px;min-width:0;">
+      <div style="font-size:12px;line-height:16px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#E5005A;">Cross · Core Hygiene Journeys</div>
+      <h1 style="margin:0;font-size:28px;line-height:40px;font-weight:600;color:#0B0B3F;">Figma Directory</h1>
+    </div>
+    <div style="flex:0 1 320px;min-width:220px;">
+      <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.TextField" size="md" leading-icon="BasicSearch" placeholder="Search flows or links" value="{{ query }}" on-change="{{ onQuery }}" hint-size="100%,44px"></x-import>
+    </div>
+    <sc-if value="{{ editable }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;gap:8px;align-items:center;">
+        <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Button" hierarchy="tertiary" size="sm" leading-icon="BasicTrash" on-click="{{ onOpenBin }}" hint-size="140px,40px">{{ binLabel }}</x-import>
+        <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Button" hierarchy="tertiary" size="sm" leading-icon="FileImport" on-click="{{ onImportClick }}" hint-size="96px,40px">Import</x-import>
+        <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Button" hierarchy="secondary" size="sm" leading-icon="FileExport" on-click="{{ onExport }}" hint-size="100px,40px">Export</x-import>
+        <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Button" hierarchy="primary" size="sm" leading-icon="BasicPlus" on-click="{{ onAddNew }}" hint-size="112px,40px">Add Link</x-import>
+        <input type="file" accept="application/json" ref="{{ fileRef }}" sc-camel-on-change="{{ onImportFile }}" style="display:none;">
+      </div>
+    </sc-if>
+  </header>
+
+  <sc-if value="{{ showDraftBar }}" hint-placeholder-val="{{ false }}">
+    <div style="margin:16px 32px 0;padding:10px 16px;border-radius:12px;border:1px solid {{ draftBorder }};background:{{ draftBg }};display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;font-size:14px;line-height:20px;color:#0B0B3F;">
+      <span style="flex:1 1 320px;text-wrap:pretty;">{{ draftText }}</span>
+      <sc-if value="{{ canDiscard }}" hint-placeholder-val="{{ false }}">
+        <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Button" hierarchy="tertiary" size="xs" leading-icon="ArrowsArrowUndo" on-click="{{ onDiscard }}" hint-size="160px,32px">Discard local changes</x-import>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <div style="flex:1;display:grid;grid-template-columns:minmax(200px,264px) minmax(0,1fr);gap:24px;padding:24px 32px 48px;align-items:start;">
+    <nav style="position:sticky;top:24px;display:flex;flex-direction:column;gap:4px;">
+      <div style="font-size:12px;line-height:16px;font-weight:600;color:var(--fg-3);padding:0 12px 8px;text-transform:uppercase;letter-spacing:.06em;display:flex;justify-content:space-between;align-items:center;gap:8px;"><span>Journeys</span><span style="text-transform:none;letter-spacing:0;font-weight:400;">{{ navHint }}</span></div>
+      <sc-for list="{{ journeyNav }}" as="n" hint-placeholder-count="10">
+        <button sc-camel-on-click="{{ n.onClick }}" aria-pressed="{{ n.pressed }}" style="position:relative;display:grid;grid-template-columns:24px minmax(0,1fr) auto;align-items:center;gap:10px;padding:10px 12px;border:0;border-radius:12px;cursor:pointer;text-align:left;font-family:inherit;font-size:14px;line-height:20px;background:{{ n.bg }};font-weight:{{ n.weight }};color:#0B0B3F;" style-hover="background:#fff;">
+          <span style="position:absolute;left:0;top:9px;width:4px;height:22px;border-radius:0 4px 4px 0;background:#1E22AA;opacity:{{ n.bar }};"></span>
+          <span style="width:24px;height:24px;border-radius:8px;display:grid;place-items:center;font-size:12px;font-weight:600;background:{{ n.tileBg }};color:{{ n.tileFg }};transition:background 150ms ease,color 150ms ease;">{{ n.letter }}</span>
+          <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ n.name }}</span>
+          <span style="font-size:12px;color:var(--fg-3);font-weight:400;">{{ n.count }}</span>
+        </button>
+      </sc-for>
+    </nav>
+
+    <main style="background:#fff;border-radius:24px;padding:24px;min-width:0;display:flex;flex-direction:column;gap:24px;">
+      <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;">
+        <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;">
+          <div style="width:200px;">
+            <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Select" size="sm" label="Design status" options="{{ fDesignOptions }}" value="{{ fDesign }}" on-change="{{ onFDesign }}" hint-size="100%,64px"></x-import>
+          </div>
+          <div style="width:200px;">
+            <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Select" size="sm" label="Delivery status" options="{{ fDeliveryOptions }}" value="{{ fDelivery }}" on-change="{{ onFDelivery }}" hint-size="100%,64px"></x-import>
+          </div>
+          <sc-if value="{{ isBoard }}" hint-placeholder-val="{{ false }}">
+            <div style="width:200px;">
+              <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Select" size="sm" label="Board columns" options="{{ groupByOptions }}" value="{{ groupBy }}" on-change="{{ onGroupBy }}" hint-size="100%,64px"></x-import>
+            </div>
+          </sc-if>
+          <sc-if value="{{ hasFilters }}" hint-placeholder-val="{{ false }}">
+            <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Button" hierarchy="tertiary" size="xs" on-click="{{ onClearFilters }}" hint-size="80px,32px">Clear</x-import>
+          </sc-if>
+        </div>
+        <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.SegmentedControl" options="{{ viewOptions }}" value="{{ view }}" on-change="{{ onView }}" hint-size="240px,40px"></x-import>
+      </div>
+
+      <sc-if value="{{ isLoading }}" hint-placeholder-val="{{ false }}">
+        <div style="padding:64px 24px;text-align:center;font-size:14px;line-height:20px;color:var(--fg-3);">Loading directory…</div>
+      </sc-if>
+
+      <sc-if value="{{ hasLoadError }}" hint-placeholder-val="{{ false }}">
+        <div style="padding:64px 24px;text-align:center;display:flex;flex-direction:column;gap:8px;align-items:center;">
+          <div style="font-size:20px;line-height:30px;font-weight:600;color:#0B0B3F;">Couldn’t load the directory</div>
+          <div style="font-size:14px;line-height:20px;color:var(--fg-3);">{{ loadErrorText }}</div>
+          <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Button" hierarchy="secondary" size="sm" on-click="{{ onRetry }}" hint-size="96px,40px">Try again</x-import>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ false }}">
+        <div style="padding:64px 24px;text-align:center;display:flex;flex-direction:column;gap:8px;align-items:center;">
+          <div style="font-size:20px;line-height:30px;font-weight:600;color:#0B0B3F;">No links found</div>
+          <div style="font-size:14px;line-height:20px;color:var(--fg-3);">Try another keyword or status, or add a new link.</div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isJourneyView }}" hint-placeholder-val="{{ true }}">
+        <sc-for list="{{ sections }}" as="j" hint-placeholder-count="2">
+          <section style="display:flex;flex-direction:column;gap:16px;">
+            <div style="display:flex;align-items:baseline;gap:12px;">
+              <h2 style="margin:0;font-size:20px;line-height:30px;font-weight:600;color:#0B0B3F;">{{ j.letter }}. {{ j.name }}</h2>
+              <span style="font-size:14px;line-height:20px;color:var(--fg-3);">{{ j.countText }}</span>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:24px;align-items:start;">
+              <sc-for list="{{ j.groups }}" as="g" hint-placeholder-count="3">
+                <article style="border:1px solid #E5E7EB;border-radius:24px;padding:24px 24px 8px;display:flex;flex-direction:column;background:#fff;box-shadow:0 2px 12px 0 rgba(0,0,0,0.04);">
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding-bottom:16px;border-bottom:1px solid #E5E7EB;">
+                    <h3 style="margin:0;font-size:20px;line-height:30px;font-weight:600;color:#0B0B3F;text-wrap:pretty;">{{ g.title }}</h3>
+                    <sc-if value="{{ editable }}" hint-placeholder-val="{{ true }}">
+                      <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Button" hierarchy="tertiary" size="xs" icon-only="BasicPlus" title="Add link to this flow" on-click="{{ g.onAdd }}" hint-size="32px,32px"></x-import>
+                    </sc-if>
+                  </div>
+                  <sc-for list="{{ g.links }}" as="l" hint-placeholder-count="3">
+                    <div sc-camel-on-click="{{ l.onOpen }}" title="View details" style="display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px;padding:16px 12px;margin:0 -12px;border-radius:12px;cursor:pointer;box-shadow:inset 0 -1px 0 {{ l.divider }};transition:background 150ms ease;" style-hover="background:#F9FAFB;">
+                      <div style="display:flex;flex-direction:column;gap:8px;min-width:0;">
+                        <span style="font-size:18px;line-height:28px;color:#22288D;text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px;text-wrap:pretty;">{{ l.title }}</span>
+                        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;">
+                          <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Badge" type="{{ l.dType }}" size="sm" dot="{{ true }}" title="Design status" hint-size="96px,20px">{{ l.dLabel }} · {{ l.dWhen }}</x-import>
+                          <sc-if value="{{ l.hasDelivery }}" hint-placeholder-val="{{ true }}">
+                            <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Badge" type="{{ l.vType }}" size="sm" icon="ArrowsArrowRight" title="Delivery status" hint-size="110px,20px">{{ l.vLabel }} · {{ l.vWhen }}</x-import>
+                          </sc-if>
+                        </div>
+                        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;">
+                          <sc-if value="{{ l.tracksBrands }}" hint-placeholder-val="{{ false }}"><div style="display:flex;gap:4px;">
+                            <sc-for list="{{ l.brandPills }}" as="bp" hint-placeholder-count="3">
+                              <span title="{{ bp.tip }}" style="display:inline-flex;align-items:center;gap:4px;height:20px;padding:0 8px;border-radius:9999px;border:1px solid #E5E7EB;font-size:11px;line-height:16px;font-weight:600;color:#364153;background:#fff;">
+                                <span style="width:6px;height:6px;border-radius:9999px;background:{{ bp.color }};"></span>{{ bp.short }}
+                              </span>
+                            </sc-for>
+                          </div></sc-if>
+                          <span style="font-size:12px;line-height:16px;color:#6A7282;">Updated {{ l.updatedText }}</span>
+                        </div>
+                      </div>
+                      <div sc-camel-on-click="{{ stop }}" style="display:flex;align-items:center;gap:4px;">
+                        <sc-if value="{{ editable }}" hint-placeholder-val="{{ true }}">
+                          <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Button" hierarchy="tertiary" size="xs" icon-only="BasicPencilEdit" title="Edit" on-click="{{ l.onEdit }}" hint-size="32px,32px"></x-import>
+                        </sc-if>
+                        <a href="{{ l.url }}" target="_blank" rel="noopener" title="Open in Figma" style="width:32px;height:32px;display:grid;place-items:center;border-radius:9999px;color:#0B0B3F;" style-hover="background:#F3F4F6;">
+                          <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Icon" name="ArrowsArrowRight" size="{{ 20 }}" hint-size="20px,20px"></x-import>
+                        </a>
+                      </div>
+                    </div>
+                  </sc-for>
+                </article>
+              </sc-for>
+            </div>
+          </section>
+        </sc-for>
+      </sc-if>
+
+      <sc-if value="{{ isStatusView }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;grid-auto-flow:column;grid-auto-columns:minmax(260px,1fr);gap:16px;align-items:start;overflow-x:auto;padding-bottom:8px;">
+          <sc-for list="{{ boardCols }}" as="col" hint-placeholder-count="4">
+            <div style="background:#F9FAFB;border:1px solid #E5E7EB;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:12px;min-height:120px;">
+              <div style="display:flex;flex-direction:column;gap:6px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+                  <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Badge" type="{{ col.badgeType }}" size="md" dot="{{ true }}" hint-size="120px,24px">{{ col.label }}</x-import>
+                  <span style="font-size:14px;line-height:20px;color:var(--fg-3);">{{ col.count }}</span>
+                </div>
+                <span style="font-size:12px;line-height:16px;color:#6A7282;text-wrap:pretty;">{{ col.desc }}</span>
+              </div>
+              <sc-for list="{{ col.items }}" as="it" hint-placeholder-count="2">
+                <div sc-camel-on-click="{{ it.onOpen }}" title="View details" style="background:#fff;border:1px solid #E5E7EB;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:8px;cursor:pointer;transition:border-color 150ms ease;" style-hover="border-color:#1E22AA;">
+                  <div style="display:flex;align-items:center;gap:8px;font-size:12px;line-height:16px;color:var(--fg-3);">
+                    <span style="width:20px;height:20px;border-radius:6px;display:grid;place-items:center;font-weight:600;background:#ECF2FF;color:#1E22AA;flex:none;">{{ it.letter }}</span>
+                    <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ it.group }}</span>
+                  </div>
+                  <span style="font-size:16px;line-height:24px;font-weight:600;color:#22288D;text-wrap:pretty;">{{ it.title }}</span>
+                  <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                    <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Badge" type="{{ it.dType }}" size="sm" dot="{{ true }}" title="Design status" hint-size="96px,20px">{{ it.dLabel }} · {{ it.dWhen }}</x-import>
+                    <sc-if value="{{ it.hasDelivery }}" hint-placeholder-val="{{ false }}">
+                      <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Badge" type="{{ it.vType }}" size="sm" icon="ArrowsArrowRight" title="Delivery status" hint-size="110px,20px">{{ it.vLabel }} · {{ it.vWhen }}</x-import>
+                    </sc-if>
+                  </div>
+                  <sc-if value="{{ it.tracksBrands }}" hint-placeholder-val="{{ false }}"><div style="display:flex;gap:4px;flex-wrap:wrap;">
+                    <sc-for list="{{ it.brandPills }}" as="bp" hint-placeholder-count="3">
+                      <span title="{{ bp.tip }}" style="display:inline-flex;align-items:center;gap:4px;height:20px;padding:0 8px;border-radius:9999px;border:1px solid #E5E7EB;font-size:11px;line-height:16px;font-weight:600;color:#364153;">
+                        <span style="width:6px;height:6px;border-radius:9999px;background:{{ bp.color }};"></span>{{ bp.short }}
+                      </span>
+                    </sc-for>
+                  </div></sc-if>
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+                    <span style="font-size:12px;line-height:16px;color:#6A7282;">{{ it.updatedText }}</span>
+                    <div sc-camel-on-click="{{ stop }}"><sc-if value="{{ editable }}" hint-placeholder-val="{{ true }}">
+                      <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Button" hierarchy="tertiary" size="xs" icon-only="BasicPencilEdit" title="Edit" on-click="{{ it.onEdit }}" hint-size="32px,32px"></x-import>
+                    </sc-if></div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+    </main>
+  </div>
+
+  <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Modal" open="{{ modalOpen }}" title="{{ modalTitle }}" on-close="{{ onClose }}" width="{{ 560 }}" hint-size="0px,0px">
+    <div style="display:flex;flex-direction:column;gap:20px;padding-top:8px;">
+      <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Select" label="Journey" options="{{ journeyOptions }}" value="{{ form.journey }}" on-change="{{ onFormJourney }}" hint-size="100%,72px"></x-import>
+      <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Select" label="Flow / card" placeholder="Select a flow" options="{{ groupOptions }}" value="{{ form.group }}" on-change="{{ onFormGroup }}" hint-size="100%,72px"></x-import>
+      <sc-if value="{{ isNewGroup }}" hint-placeholder-val="{{ false }}">
+        <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.TextField" label="New flow name" placeholder="e.g. SIM Replacement" value="{{ form.newGroup }}" on-change="{{ onFormNewGroup }}" hint-size="100%,72px"></x-import>
+      </sc-if>
+      <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.TextField" label="Title" placeholder="e.g. Replacement Any to eSIM" value="{{ form.title }}" on-change="{{ onFormTitle }}" helper="{{ titleHelper }}" status="{{ titleStatus }}" hint-size="100%,72px"></x-import>
+      <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.TextField" label="Figma link" placeholder="https://www.figma.com/design/…" value="{{ form.url }}" on-change="{{ onFormUrl }}" leading-icon="BasicLink" hint-size="100%,72px"></x-import>
+      <sc-if value="{{ isAdding }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-direction:column;gap:20px;">
+          <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;">
+            <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Select" label="Design status" options="{{ designOptions }}" value="{{ form.design }}" on-change="{{ onFormDesign }}" hint-size="100%,72px"></x-import>
+            <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Select" label="Delivery status" options="{{ deliveryOptions }}" value="{{ form.delivery }}" on-change="{{ onFormDelivery }}" hint-size="100%,72px"></x-import>
+          </div>
+          <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.TextField" label="Your name" placeholder="e.g. Rina (Design)" value="{{ form.by }}" on-change="{{ onFormBy }}" helper="{{ byHelper }}" status="{{ byStatus }}" leading-icon="BasicUser" hint-size="100%,72px"></x-import>
+        </div>
+      </sc-if>
+      <sc-if value="{{ isEditing }}" hint-placeholder-val="{{ false }}">
+        <div style="font-size:14px;line-height:20px;color:var(--fg-3);text-wrap:pretty;">Change design, delivery and brand status from the link’s detail panel. Each change is signed with a name and time-stamped.</div>
+      </sc-if>
+      <div style="display:flex;align-items:center;gap:16px;padding-top:8px;">
+        <sc-if value="{{ isEditing }}" hint-placeholder-val="{{ false }}">
+          <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Button" hierarchy="tertiary" size="sm" leading-icon="BasicTrash" on-click="{{ onDelete }}" hint-size="96px,40px">Delete</x-import>
+        </sc-if>
+        <div style="flex:1;"></div>
+        <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Button" hierarchy="secondary" size="sm" on-click="{{ onClose }}" hint-size="88px,40px">Cancel</x-import>
+        <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Button" hierarchy="primary" size="sm" on-click="{{ onSave }}" hint-size="80px,40px">Save</x-import>
+      </div>
+    </div>
+  </x-import>
+
+  <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Modal" open="{{ binOpen }}" title="Recycle Bin" on-close="{{ onCloseBin }}" width="{{ 600 }}" hint-size="0px,0px">
+    <div style="display:flex;flex-direction:column;gap:16px;padding-top:4px;">
+      <div style="font-size:14px;line-height:20px;color:var(--fg-3);">Deleted links stay here for 3 days, then they’re removed permanently.</div>
+      <sc-if value="{{ binEmpty }}" hint-placeholder-val="{{ false }}">
+        <div style="padding:40px 16px;text-align:center;border:1px dashed #D1D5DC;border-radius:16px;font-size:14px;line-height:20px;color:var(--fg-3);">Recycle Bin is empty</div>
+      </sc-if>
+      <sc-if value="{{ binHasItems }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;border:1px solid #E5E7EB;border-radius:16px;max-height:420px;overflow-y:auto;">
+          <sc-for list="{{ binItems }}" as="b" hint-placeholder-count="2">
+            <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:12px;padding:16px;box-shadow:inset 0 -1px 0 #E5E7EB;">
+              <div style="display:flex;flex-direction:column;gap:4px;min-width:0;">
+                <span style="font-size:16px;line-height:24px;font-weight:600;color:#0B0B3F;text-wrap:pretty;">{{ b.title }}</span>
+                <span style="font-size:12px;line-height:16px;color:var(--fg-3);">{{ b.where }}</span>
+                <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;">
+                  <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Badge" type="{{ b.leftType }}" size="sm" hint-size="80px,20px">{{ b.left }}</x-import>
+                  <span style="font-size:12px;line-height:16px;color:#6A7282;">Deleted {{ b.dateText }} by {{ b.by }}</span>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Button" hierarchy="secondary" size="xs" leading-icon="ArrowsArrowUndo" on-click="{{ b.onRestore }}" hint-size="96px,32px">Restore</x-import>
+                <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Button" hierarchy="tertiary" size="xs" icon-only="BasicTrash" title="Delete permanently" on-click="{{ b.onPurge }}" hint-size="32px,32px"></x-import>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+    </div>
+  </x-import>
+
+  <sc-if value="{{ drawerOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:40;display:flex;justify-content:flex-end;font-family:var(--font-sans);">
+      <div sc-camel-on-click="{{ onCloseDrawer }}" style="position:absolute;inset:0;background:rgba(0,0,0,0.5);"></div>
+      <aside style="position:relative;width:min(560px,100%);height:100%;background:#fff;border-radius:24px 0 0 24px;box-shadow:0px 8px 16px -4px rgba(12,37,86,0.22);display:flex;flex-direction:column;overflow:hidden;">
+        <div style="padding:24px 24px 16px;display:flex;flex-direction:column;gap:12px;border-bottom:1px solid #E5E7EB;">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+            <div style="display:flex;align-items:center;gap:8px;font-size:12px;line-height:16px;color:var(--fg-3);min-width:0;">
+              <span style="width:20px;height:20px;border-radius:6px;display:grid;place-items:center;font-weight:600;background:#ECF2FF;color:#1E22AA;flex:none;">{{ dl.letter }}</span>
+              <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ dl.journeyName }} / {{ dl.group }}</span>
+            </div>
+            <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Button" hierarchy="tertiary" size="xs" icon-only="BasicCross" title="Close" on-click="{{ onCloseDrawer }}" hint-size="32px,32px"></x-import>
+          </div>
+          <h2 style="margin:0;font-size:24px;line-height:36px;font-weight:600;color:#0B0B3F;text-wrap:pretty;">{{ dl.title }}</h2>
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;">
+            <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Badge" type="{{ dl.dType }}" size="md" dot="{{ true }}" hint-size="110px,24px">{{ dl.dLabel }} · {{ dl.dWhen }}</x-import>
+            <sc-if value="{{ dl.hasDelivery }}" hint-placeholder-val="{{ true }}">
+              <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Badge" type="{{ dl.vType }}" size="md" icon="ArrowsArrowRight" hint-size="120px,24px">{{ dl.vLabel }} · {{ dl.vWhen }}</x-import>
+            </sc-if>
+            <span style="font-size:12px;line-height:16px;color:#6A7282;">Updated {{ dl.updatedText }}</span>
+          </div>
+          <div style="display:flex;gap:8px;padding-top:4px;">
+            <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Button" hierarchy="primary" size="sm" trailing-icon="ArrowsArrowTopRight" on-click="{{ onOpenFigma }}" hint-size="150px,40px">Open in Figma</x-import>
+            <sc-if value="{{ editable }}" hint-placeholder-val="{{ true }}">
+              <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Button" hierarchy="secondary" size="sm" leading-icon="BasicPencilEdit" on-click="{{ dl.onEdit }}" hint-size="80px,40px">Edit</x-import>
+            </sc-if>
+          </div>
+        </div>
+        <sc-if value="{{ showTabs }}" hint-placeholder-val="{{ true }}">
+          <div style="padding:0 24px;border-bottom:1px solid #E5E7EB;overflow-x:auto;">
+            <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Tabs" tabs="{{ drawerTabs }}" value="{{ drawerTab }}" on-change="{{ onDrawerTab }}" hint-size="100%,40px"></x-import>
+          </div>
+        </sc-if>
+        <div style="flex:1;overflow:auto;padding:24px;display:flex;flex-direction:column;gap:32px;">
+          <sc-if value="{{ showOverview }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex;flex-direction:column;gap:32px;">
+              <div style="display:flex;flex-direction:column;gap:12px;">
+                <div style="font-size:16px;line-height:24px;font-weight:600;color:#0B0B3F;">Status</div>
+                <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;">
+                  <div style="display:flex;flex-direction:column;gap:6px;">
+                    <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Select" size="sm" label="Design" options="{{ designOptions }}" value="{{ dl.design }}" on-change="{{ onDesignChange }}" disabled="{{ readOnlyFlag }}" hint-size="100%,64px"></x-import>
+                    <span style="font-size:12px;line-height:16px;color:#6A7282;text-wrap:pretty;">{{ dl.dDesc }}</span>
+                    <span style="font-size:12px;line-height:16px;color:#364153;">{{ dl.dMeta }}</span>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:6px;">
+                    <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Select" size="sm" label="Delivery" options="{{ deliveryOptions }}" value="{{ dl.delivery }}" on-change="{{ onDeliveryChange }}" disabled="{{ readOnlyFlag }}" hint-size="100%,64px"></x-import>
+                    <span style="font-size:12px;line-height:16px;color:#6A7282;text-wrap:pretty;">{{ dl.vDesc }}</span>
+                    <span style="font-size:12px;line-height:16px;color:#364153;">{{ dl.vMeta }}</span>
+                  </div>
+                </div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:12px;">
+                <div style="font-size:16px;line-height:24px;font-weight:600;color:#0B0B3F;">Details</div>
+                <div style="display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px 16px;font-size:14px;line-height:20px;">
+                  <span style="color:var(--fg-3);">Journey</span><span>{{ dl.letter }}. {{ dl.journeyName }}</span>
+                  <span style="color:var(--fg-3);">Flow</span><span>{{ dl.group }}</span>
+                  <span style="color:var(--fg-3);">Last updated</span><span>{{ dl.updatedText }}</span>
+                </div>
+                <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.TextField" label="Owner / PIC" size="sm" placeholder="e.g. Designer or PM name" value="{{ dl.owner }}" on-change="{{ onOwner }}" disabled="{{ readOnlyFlag }}" leading-icon="BasicUser" hint-size="100%,64px"></x-import>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:12px;">
+                <div style="font-size:16px;line-height:24px;font-weight:600;color:#0B0B3F;">Related links</div>
+                <sc-if value="{{ hasRelated }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;flex-direction:column;border:1px solid #E5E7EB;border-radius:16px;overflow:hidden;">
+                    <sc-for list="{{ related }}" as="r" hint-placeholder-count="2">
+                      <div style="display:grid;grid-template-columns:24px minmax(0,1fr) auto;align-items:center;gap:12px;padding:12px 16px;box-shadow:inset 0 -1px 0 #E5E7EB;">
+                        <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Icon" name="BasicLink" size="{{ 20 }}" hint-size="20px,20px"></x-import>
+                        <a href="{{ r.url }}" target="_blank" rel="noopener" style="display:flex;flex-direction:column;min-width:0;text-decoration:none;">
+                          <span style="font-size:14px;line-height:20px;font-weight:600;color:#22288D;">{{ r.label }}</span>
+                          <span style="font-size:12px;line-height:16px;color:#6A7282;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ r.url }}</span>
+                        </a>
+                        <sc-if value="{{ editable }}" hint-placeholder-val="{{ true }}">
+                          <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Button" hierarchy="tertiary" size="xs" icon-only="BasicTrash" title="Remove" on-click="{{ r.onRemove }}" hint-size="32px,32px"></x-import>
+                        </sc-if>
+                      </div>
+                    </sc-for>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ noRelated }}" hint-placeholder-val="{{ true }}">
+                  <div style="font-size:14px;line-height:20px;color:var(--fg-3);">No related links yet — add a prototype, PRD, Jira epic or research doc.</div>
+                </sc-if>
+                <sc-if value="{{ editable }}" hint-placeholder-val="{{ true }}">
+                  <div style="display:grid;grid-template-columns:minmax(0,140px) minmax(0,1fr) auto;gap:8px;align-items:end;">
+                    <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Select" size="sm" placeholder="Type" options="{{ relTypes }}" value="{{ drafts.relLabel }}" on-change="{{ onRelLabel }}" hint-size="100%,36px"></x-import>
+                    <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.TextField" size="sm" placeholder="Paste URL" value="{{ drafts.relUrl }}" on-change="{{ onRelUrl }}" hint-size="100%,36px"></x-import>
+                    <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Button" hierarchy="secondary" size="xs" leading-icon="BasicPlus" on-click="{{ onAddRel }}" hint-size="72px,32px">Add</x-import>
+                  </div>
+                </sc-if>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ showBrands }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:16px;">
+              <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;">
+                <div style="font-size:16px;line-height:24px;font-weight:600;color:#0B0B3F;">Brand adoption</div>
+                <span style="font-size:12px;line-height:16px;color:#6A7282;">{{ brandSummary }}</span>
+              </div>
+              <sc-if value="{{ noBrandTracking }}" hint-placeholder-val="{{ false }}">
+                <div style="padding:32px 16px;border:1px dashed #D1D5DC;border-radius:16px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;">
+                  <span style="font-size:16px;line-height:24px;font-weight:600;color:#0B0B3F;">Brand adoption not tracked</span>
+                  <span style="font-size:14px;line-height:20px;color:var(--fg-3);max-width:360px;text-wrap:pretty;">Optional. Turn it on if this flow needs to be adopted by XL, AXIS or Smartfren.</span>
+                  <sc-if value="{{ editable }}" hint-placeholder-val="{{ true }}">
+                    <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Button" hierarchy="secondary" size="sm" leading-icon="BasicPlus" on-click="{{ onTrackOn }}" hint-size="200px,40px">Track Brand Adoption</x-import>
+                  </sc-if>
+                </div>
+              </sc-if>
+              <sc-for list="{{ brandCards }}" as="b" hint-placeholder-count="3">
+                <div style="border:1px solid #E5E7EB;border-radius:16px;overflow:hidden;">
+                  <button sc-camel-on-click="{{ b.onToggle }}" aria-expanded="{{ b.expanded }}" style="width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto 20px;align-items:center;gap:12px;padding:16px;border:0;background:{{ b.headBg }};cursor:pointer;font-family:inherit;text-align:left;" style-hover="background:#F9FAFB;">
+                    <div style="display:flex;flex-direction:column;gap:2px;min-width:0;">
+                      <span style="font-size:16px;line-height:24px;font-weight:600;color:#0B0B3F;">{{ b.name }}</span>
+                      <span style="font-size:12px;line-height:16px;color:{{ b.targetColor }};font-weight:{{ b.targetWeight }};">{{ b.targetText }}</span>
+                    </div>
+                    <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Badge" type="{{ b.statusType }}" size="md" dot="{{ true }}" hint-size="96px,24px">{{ b.statusLabel }}</x-import>
+                    <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Icon" name="{{ b.chevron }}" size="{{ 20 }}" hint-size="20px,20px"></x-import>
+                  </button>
+                  <sc-if value="{{ b.open }}" hint-placeholder-val="{{ false }}">
+                    <div style="padding:4px 16px 20px;display:flex;flex-direction:column;gap:16px;border-top:1px solid #E5E7EB;">
+                      <div style="display:flex;flex-direction:column;gap:6px;padding-top:12px;">
+                        <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Select" size="sm" label="Adoption status" options="{{ brandStatusOptions }}" value="{{ b.status }}" on-change="{{ b.onStatus }}" disabled="{{ readOnlyFlag }}" hint-size="100%,64px"></x-import>
+                        <span style="font-size:12px;line-height:16px;color:#364153;">{{ b.metaText }}</span>
+                      </div>
+                      <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:end;">
+                        <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.TextField" size="sm" label="Brand design Figma link" placeholder="https://www.figma.com/design/…" leading-icon="BasicLink" value="{{ b.figmaUrl }}" on-change="{{ b.onFigma }}" disabled="{{ readOnlyFlag }}" hint-size="100%,64px"></x-import>
+                        <sc-if value="{{ b.hasFigma }}" hint-placeholder-val="{{ false }}">
+                          <a href="{{ b.figmaUrl }}" target="_blank" rel="noopener" title="Open brand file" style="width:36px;height:36px;display:grid;place-items:center;border-radius:9999px;border:1px solid #D1D5DC;color:#0B0B3F;" style-hover="background:#F3F4F6;">
+                            <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Icon" name="ArrowsArrowTopRight" size="{{ 20 }}" hint-size="20px,20px"></x-import>
+                          </a>
+                        </sc-if>
+                      </div>
+                      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 16px;">
+                        <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.TextField" size="sm" type="date" label="Shared date" value="{{ b.sharedDate }}" on-change="{{ b.onShared }}" disabled="{{ readOnlyFlag }}" hint-size="100%,64px"></x-import>
+                        <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.TextField" size="sm" label="Blueprint version shared" placeholder="e.g. v2.3" value="{{ b.blueprint }}" on-change="{{ b.onBlueprint }}" disabled="{{ readOnlyFlag }}" hint-size="100%,64px"></x-import>
+                        <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.TextField" size="sm" label="Brand owner" placeholder="Designer in charge" value="{{ b.owner }}" on-change="{{ b.onOwner }}" disabled="{{ readOnlyFlag }}" hint-size="100%,64px"></x-import>
+                        <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.TextField" size="sm" type="date" label="Target release" value="{{ b.targetRelease }}" on-change="{{ b.onTarget }}" disabled="{{ readOnlyFlag }}" hint-size="100%,64px"></x-import>
+                        <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.TextField" size="sm" type="date" label="Last audit" value="{{ b.lastAudit }}" on-change="{{ b.onAudit }}" disabled="{{ readOnlyFlag }}" hint-size="100%,64px"></x-import>
+                        <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.TextField" size="sm" label="Audit report link" placeholder="Optional — doc, sheet, FigJam" value="{{ b.auditLink }}" on-change="{{ b.onAuditLink }}" disabled="{{ readOnlyFlag }}" hint-size="100%,64px"></x-import>
+                      </div>
+                      <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.TextArea" label="Audit notes" placeholder="Gaps found, deviations from blueprint, follow-ups…" value="{{ b.auditNotes }}" on-change="{{ b.onNotes }}" disabled="{{ readOnlyFlag }}" hint-size="100%,140px"></x-import>
+                    </div>
+                  </sc-if>
+                </div>
+              </sc-for>
+              <sc-if value="{{ canStopTracking }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;justify-content:flex-start;">
+                  <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Button" hierarchy="tertiary" size="xs" on-click="{{ onTrackOff }}" hint-size="180px,32px">Stop Tracking Brand Adoption</x-import>
+                </div>
+              </sc-if>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ showChangelog }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:16px;">
+              <div style="font-size:16px;line-height:24px;font-weight:600;color:#0B0B3F;">Changelog</div>
+              <sc-if value="{{ editable }}" hint-placeholder-val="{{ true }}">
+                <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:end;">
+                  <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.TextField" size="sm" placeholder="What changed? e.g. Updated OTP error states" value="{{ drafts.note }}" on-change="{{ onNote }}" hint-size="100%,36px"></x-import>
+                  <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Button" hierarchy="secondary" size="xs" leading-icon="BasicPlus" on-click="{{ onAddNote }}" hint-size="72px,32px">Log</x-import>
+                </div>
+              </sc-if>
+              <div style="display:flex;flex-direction:column;">
+                <sc-for list="{{ changelog }}" as="c" hint-placeholder-count="3">
+                  <div style="display:grid;grid-template-columns:12px minmax(0,1fr);gap:12px;">
+                    <div style="display:flex;flex-direction:column;align-items:center;">
+                      <span style="width:10px;height:10px;border-radius:9999px;margin-top:5px;background:{{ c.dot }};flex:none;"></span>
+                      <span style="flex:1;width:1px;background:#E5E7EB;opacity:{{ c.line }};"></span>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:2px;padding-bottom:20px;">
+                      <span style="font-size:14px;line-height:20px;color:#030712;text-wrap:pretty;">{{ c.note }}</span>
+                      <span style="font-size:12px;line-height:16px;color:#6A7282;">{{ c.dateText }} · {{ c.author }}</span>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ showComments }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:16px;">
+              <div style="font-size:16px;line-height:24px;font-weight:600;color:#0B0B3F;">Comments</div>
+              <sc-if value="{{ noComments }}" hint-placeholder-val="{{ true }}">
+                <div style="font-size:14px;line-height:20px;color:var(--fg-3);">No comments yet</div>
+              </sc-if>
+              <sc-for list="{{ comments }}" as="m" hint-placeholder-count="2">
+                <div style="display:grid;grid-template-columns:32px minmax(0,1fr);gap:12px;">
+                  <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Avatar" size="md" name="{{ m.author }}" hint-size="32px,32px"></x-import>
+                  <div style="display:flex;flex-direction:column;gap:4px;">
+                    <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;">
+                      <span style="font-size:14px;line-height:20px;font-weight:600;">{{ m.author }}</span>
+                      <span style="font-size:12px;line-height:16px;color:#6A7282;">{{ m.dateText }}</span>
+                    </div>
+                    <div style="font-size:14px;line-height:20px;color:#1E2939;white-space:pre-wrap;text-wrap:pretty;">{{ m.text }}</div>
+                  </div>
+                </div>
+              </sc-for>
+              <sc-if value="{{ editable }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex;flex-direction:column;gap:8px;padding-top:8px;border-top:1px solid #E5E7EB;">
+                <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.TextField" size="sm" label="Your name" placeholder="e.g. Rina (Design)" value="{{ me }}" on-change="{{ onMe }}" hint-size="100%,64px"></x-import>
+                <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.TextArea" placeholder="Write a comment…" value="{{ drafts.comment }}" on-change="{{ onComment }}" hint-size="100%,120px"></x-import>
+                <div style="display:flex;justify-content:flex-end;">
+                  <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Button" hierarchy="primary" size="sm" leading-icon="BasicSend" on-click="{{ onPostComment }}" hint-size="96px,40px">Post</x-import>
+                </div>
+              </div>
+              </sc-if>
+            </div>
+          </sc-if>
+        </div>
+      </aside>
+    </div>
+  </sc-if>
+
+  <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Modal" open="{{ pendOpen }}" title="Confirm status change" on-close="{{ onPendCancel }}" width="{{ 480 }}" hint-size="0px,0px">
+    <div style="display:flex;flex-direction:column;gap:20px;padding-top:4px;">
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        <span style="font-size:12px;line-height:16px;font-weight:600;color:#6A7282;text-transform:uppercase;letter-spacing:.06em;">{{ pend.scope }}</span>
+        <span style="font-size:16px;line-height:24px;font-weight:600;color:#0B0B3F;text-wrap:pretty;">{{ pend.linkTitle }}</span>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:16px;border-radius:16px;background:#F9FAFB;border:1px solid #E5E7EB;">
+        <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Badge" type="{{ pend.fromType }}" size="md" dot="{{ true }}" hint-size="100px,24px">{{ pend.fromLabel }}</x-import>
+        <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Icon" name="ArrowsArrowRight" size="{{ 20 }}" hint-size="20px,20px"></x-import>
+        <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Badge" type="{{ pend.toType }}" size="md" dot="{{ true }}" hint-size="100px,24px">{{ pend.toLabel }}</x-import>
+      </div>
+      <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.TextField" label="Your name" placeholder="e.g. Rina (Design)" value="{{ pend.name }}" on-change="{{ onPendName }}" helper="{{ pend.nameHelper }}" status="{{ pend.nameStatus }}" leading-icon="BasicUser" hint-size="100%,72px"></x-import>
+      <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.TextArea" label="Note (optional)" placeholder="Why the change? e.g. Signed off in design critique" value="{{ pend.note }}" on-change="{{ onPendNote }}" hint-size="100%,120px"></x-import>
+      <div style="display:flex;align-items:center;gap:8px;font-size:12px;line-height:16px;color:#6A7282;">
+        <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Icon" name="TimeCalendar" size="{{ 16 }}" hint-size="16px,16px"></x-import>
+        <span>Will be recorded as {{ pend.when }}</span>
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:16px;">
+        <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Button" hierarchy="secondary" size="sm" on-click="{{ onPendCancel }}" hint-size="88px,40px">Cancel</x-import>
+        <x-import component-from-global-scope="XLSMARTDesignSystem_30a624.Button" hierarchy="primary" size="sm" on-click="{{ onPendConfirm }}" hint-size="150px,40px">Confirm Change</x-import>
+      </div>
+    </div>
+  </x-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script="" data-props="{&quot;defaultView&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;journey&quot;,&quot;status&quot;],&quot;default&quot;:&quot;journey&quot;,&quot;tsType&quot;:&quot;'journey'|'status'&quot;},&quot;drawerLayout&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;tabs&quot;,&quot;single page&quot;],&quot;default&quot;:&quot;tabs&quot;,&quot;tsType&quot;:&quot;'tabs'|'single page'&quot;},&quot;readOnly&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+const KEY = 'cross-figma-directory-v1';
+const DESIGN = [
+  { value: 'draft', label: 'Exploring / Draft', badge: 'default', desc: 'Early ideas, wireframes, nothing agreed yet' },
+  { value: 'progress', label: 'In progress', badge: 'information', desc: 'Actively being designed' },
+  { value: 'review', label: 'In review', badge: 'warning', desc: 'Waiting for design critique or stakeholder feedback' },
+  { value: 'validating', label: 'Validating', badge: 'accent', desc: 'Being tested — usability test, A/B concept, research' },
+  { value: 'approved', label: 'Approved', badge: 'brand', desc: 'Signed off, not yet packaged for dev' },
+  { value: 'ready', label: 'Ready for dev', badge: 'success', desc: 'Specs, states, edge cases and assets complete' },
+  { value: 'hold', label: 'On hold', badge: 'error', desc: 'Paused — priority change or blocked by a decision' },
+  { value: 'deprecated', label: 'Deprecated', badge: 'default', desc: 'Old version, kept for reference only' },
+];
+const DELIVERY = [
+  { value: 'none', label: 'Not started', badge: 'default', desc: 'Not handed to dev yet' },
+  { value: 'handed', label: 'Handed off', badge: 'brand', desc: 'Dev has received and acknowledged it' },
+  { value: 'dev', label: 'In development', badge: 'information', desc: 'Being built' },
+  { value: 'qa', label: 'In QA', badge: 'warning', desc: 'Built, being checked against design' },
+  { value: 'release', label: 'Ready for release', badge: 'accent', desc: 'Passed QA, waiting for deployment' },
+  { value: 'released', label: 'Released', badge: 'success', desc: 'Live in production' },
+  { value: 'iterating', label: 'Iterating', badge: 'information', desc: 'Live, follow-up improvement planned' },
+];
+const BSTAT = [
+  { value: 'not_shared', label: 'Not shared', badge: 'default', dot: '#D1D5DC', desc: 'Blueprint not shared with the brand yet' },
+  { value: 'shared', label: 'Shared', badge: 'information', dot: '#0284C7', desc: 'Blueprint shared with the brand team' },
+  { value: 'progress', label: 'In progress', badge: 'brand', dot: '#1E22AA', desc: 'Brand team is adapting the design' },
+  { value: 'submitted', label: 'Submitted', badge: 'accent', dot: '#E5005A', desc: 'Brand design submitted for audit' },
+  { value: 'audit', label: 'In audit', badge: 'warning', dot: '#D97706', desc: 'Being checked against the blueprint' },
+  { value: 'aligned', label: 'Aligned', badge: 'success', dot: '#16A34A', desc: 'Matches the blueprint' },
+  { value: 'outdated', label: 'Outdated', badge: 'error', dot: '#DC2626', desc: 'Blueprint changed since last alignment' },
+];
+const BRANDS = [{ k: 'xl', name: 'XL', short: 'XL' }, { k: 'axis', name: 'AXIS', short: 'AXIS' }, { k: 'sf', name: 'Smartfren', short: 'SF' }];
+const toMap = a => Object.fromEntries(a.map(s => [s.value, s]));
+const DMAP = toMap(DESIGN), VMAP = toMap(DELIVERY), BMAP = toMap(BSTAT);
+const FIG = 'https://www.figma.com/';
+let _id = 0; const uid = () => Date.now().toString(36) + (_id++).toString(36);
+const emptyBrand = () => ({ status: 'not_shared', sharedDate: '', figmaUrl: '', blueprint: '', owner: '', lastAudit: '', auditNotes: '', auditLink: '', targetRelease: '', meta: null });
+const G = (title, links) => ({ id: uid(), title, links });
+
+// ── Data source ────────────────────────────────────────────────────────────
+// The directory lives in directory.json in the repo root. Every visit fetches it
+// fresh, and open tabs re-check it on focus and every minute, so a push → Vercel
+// deploy shows up for everyone without a hard refresh.
+// Add ?edit to the URL to edit in the browser; edits stay in this browser as a
+// draft until you Export directory.json and commit it.
+const DATA_URL = '/data/directory.json';
+const SYNC_MS = 60 * 1000;
+const EDIT_MODE = (() => { try { return new URLSearchParams(location.search).has('edit'); } catch (e) { return false; } })();
+const DRAFT_KEY = KEY + '-draft';
+const hashText = s => { let h = 5381; for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0; return (h >>> 0).toString(36) + ':' + s.length; };
+const sameData = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+// Export without empty fields so commits to directory.json stay readable.
+const leanLink = l => {
+  const { id, title, url, design, delivery, updated, brands, brandTracking, ...more } = l;
+  const out = { id, title, url, design, delivery, updated, ...more };
+  if (brandTracking) {
+    out.brandTracking = true;
+    out.brands = Object.fromEntries(Object.entries(brands || {}).map(([k, v]) => [k, Object.fromEntries(Object.entries(v).filter(([, x]) => x !== '' && x !== null && x !== undefined))]));
+  }
+  return out;
+};
+const leanData = d => d.map(j => ({ ...j, groups: j.groups.map(g => ({ ...g, links: g.links.map(leanLink) })) }));
+const norm = l => {
+  let { design, delivery } = l;
+  if (!design) { const m = { dev: ['progress', 'none'], shipped: ['ready', 'qa'], live: ['ready', 'released'] }[l.status] || ['draft', 'none']; design = m[0]; delivery = m[1]; }
+  const brands = {}; BRANDS.forEach(b => { brands[b.k] = { ...emptyBrand(), ...((l.brands || {})[b.k] || {}) }; });
+  const { status, ...rest } = l;
+  const brandTracking = l.brandTracking ?? BRANDS.some(b => brands[b.k].status !== 'not_shared');
+  return { ...rest, design, delivery: delivery || 'none', brands, brandTracking };
+};
+const normData = d => d.map(j => ({ ...j, groups: j.groups.map(g => ({ ...g, links: g.links.map(norm) })) }));
+const TTL = 3 * 24 * 3600 * 1000;
+const pad = n => String(n).padStart(2, '0');
+const todayISO = () => { const d = new Date(); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); };
+const nowISO = () => new Date().toISOString();
+const fmt = iso => { if (!iso) return '—'; const [y, m, d] = iso.slice(0, 10).split('-'); return d + '/' + m + '/' + y; };
+const fmtDT = s => { if (!s) return '—'; if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return fmt(s); const d = new Date(s); if (isNaN(d)) return s; return pad(d.getDate()) + '/' + pad(d.getMonth() + 1) + '/' + d.getFullYear() + ', ' + pad(d.getHours()) + ':' + pad(d.getMinutes()); };
+const sortKey = s => { if (!s) return 0; const t = new Date(s).getTime(); return isNaN(t) ? 0 : t; };
+const EMPTY_FORM = { journey: 'A', group: '', newGroup: '', title: '', url: '', design: 'draft', delivery: 'none', by: '' };
+const EMPTY_DRAFTS = { relLabel: 'Prototype', relUrl: '', note: '', comment: '' };
+
+class Component extends DCLogic {
+  state = { data: null, published: null, pubHash: null, loadError: '', dirty: false, newerPublished: false, active: [], fDesign: 'all', fDelivery: 'all', groupBy: 'design', query: '', view: null, modal: null, form: { ...EMPTY_FORM }, tried: false, trash: [], binOpen: false, drawer: null, drawerTab: 'overview', brandOpen: 'xl', drafts: { ...EMPTY_DRAFTS }, me: '', pending: null };
+  fileRef = React.createRef();
+
+  componentDidMount() {
+    let me = ''; try { me = localStorage.getItem(KEY + '-me') || ''; } catch (e) {}
+    let trash = []; try { trash = JSON.parse(localStorage.getItem(KEY + '-trash') || '[]'); } catch (e) {}
+    this.setState({ me }, () => this.commitTrash(Array.isArray(trash) ? trash : []));
+    this.load(true);
+    this._esc = e => { if (e.key === 'Escape' && !this.state.modal && !this.state.pending) this.setState({ drawer: null }); };
+    this._sync = () => { if (document.visibilityState === 'visible') this.load(false); };
+    window.addEventListener('keydown', this._esc);
+    window.addEventListener('focus', this._sync);
+    document.addEventListener('visibilitychange', this._sync);
+    this._timer = setInterval(this._sync, SYNC_MS);
+  }
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this._esc);
+    window.removeEventListener('focus', this._sync);
+    document.removeEventListener('visibilitychange', this._sync);
+    clearInterval(this._timer);
+  }
+
+  // Fetch the published directory. On first load this also decides whether to
+  // resume a local draft (edit mode only); later calls just pick up new deploys.
+  async load(first) {
+    if (this._loading) return; this._loading = true;
+    try {
+      const res = await fetch(DATA_URL + '?t=' + Date.now(), { cache: 'no-store' });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const text = await res.text();
+      const hash = hashText(text);
+      if (!first && hash === this.state.pubHash) return;
+      const raw = JSON.parse(text);
+      if (!Array.isArray(raw)) throw new Error('directory.json is not a list of journeys');
+      const published = normData(raw);
+      const draft = EDIT_MODE ? this.readDraft() : null;
+
+      if (draft && !sameData(draft.data, published)) {
+        if (first) {
+          const keep = draft.base === hash || !window.confirm('The published directory changed since you started editing in this browser.\n\nOK: load the new published version (your local edits are discarded).\nCancel: keep editing your local copy.');
+          if (keep) { this.setState({ data: draft.data, published, pubHash: draft.base, dirty: true, newerPublished: draft.base !== hash, loadError: '' }); return; }
+          this.clearDraft();
+        } else {
+          // A new deploy landed while you have unpublished edits: don't overwrite them.
+          this.setState({ newerPublished: true });
+          return;
+        }
+      } else if (draft) this.clearDraft();
+
+      this.setState({ data: published, published, pubHash: hash, dirty: false, newerPublished: false, loadError: '' });
+    } catch (err) {
+      if (first || !this.state.data) this.setState({ loadError: String(err && err.message || err) });
+    } finally { this._loading = false; }
+  }
+  readDraft() { try { const d = JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null'); return d && Array.isArray(d.data) ? { base: d.base, data: normData(d.data) } : null; } catch (e) { return null; } }
+  clearDraft() { try { localStorage.removeItem(DRAFT_KEY); } catch (e) {} }
+  discardDraft() {
+    if (!window.confirm('Discard your local changes and go back to the published directory?')) return;
+    this.clearDraft(); this.setState({ data: this.state.published, dirty: false, newerPublished: false, drawer: null }, () => this.load(true));
+  }
+  find(lid) { for (const j of this.state.data || []) for (const g of j.groups) for (const l of g.links) if (l.id === lid) return { j, g, l }; return null; }
+  updateLink(lid, fn) { this.commit(this.state.data.map(j => ({ ...j, groups: j.groups.map(g => ({ ...g, links: g.links.map(l => l.id === lid ? fn(l) : l) })) }))); }
+  commitTrash(trash) { const cut = Date.now() - TTL; trash = trash.filter(t => t.deletedAt > cut); this.setState({ trash }); try { localStorage.setItem(KEY + '-trash', JSON.stringify(trash)); } catch (e) {} }
+  restore(item) {
+    const link = norm({ ...item.link, changelog: [...(item.link.changelog || []), { at: nowISO(), author: this.author(), note: 'Restored from Recycle Bin' }] });
+    const data = this.state.data.map(j => {
+      if (j.id !== item.jid) return j;
+      const g = j.groups.find(x => x.id === item.gid) || j.groups.find(x => x.title.toLowerCase() === item.gtitle.toLowerCase());
+      if (g) return { ...j, groups: j.groups.map(x => x === g ? { ...x, links: [...x.links, link] } : x) };
+      return { ...j, groups: [...j.groups, { id: item.gid, title: item.gtitle, links: [link] }] };
+    });
+    this.commit(data); this.commitTrash(this.state.trash.filter(t => t !== item));
+  }
+  author() { return this.state.me.trim() || 'Cross team'; }
+  saveMe(name) { this.setState({ me: name }); try { localStorage.setItem(KEY + '-me', name); } catch (e) {} }
+  setDraft(p) { this.setState(s => ({ drafts: { ...s.drafts, ...p } })); }
+  // Edits only happen in ?edit mode. They're kept as a local draft (tagged with the
+  // published version they started from) until you Export and commit directory.json.
+  commit(data) {
+    const dirty = !this.state.published || !sameData(data, this.state.published);
+    this.setState({ data, dirty });
+    if (!EDIT_MODE) return;
+    try { if (dirty) localStorage.setItem(DRAFT_KEY, JSON.stringify({ base: this.state.pubHash, data })); else this.clearDraft(); } catch (e) {}
+  }
+
+  openNew(journey, groupId) {
+    const j = journey || this.state.active[0] || ((this.state.data || [])[0] || {}).id || 'A';
+    this.setState({ modal: { mode: 'new' }, tried: false, form: { ...EMPTY_FORM, journey: j, group: groupId || '', by: this.state.me } });
+  }
+  openEdit(jid, gid, link) {
+    this.setState({ modal: { mode: 'edit', jid, gid, lid: link.id }, tried: false, form: { ...EMPTY_FORM, journey: jid, group: gid, title: link.title, url: link.url } });
+  }
+  setForm(patch) { this.setState(s => ({ form: { ...s.form, ...patch } })); }
+  prune(data) { return data.map(j => ({ ...j, groups: j.groups.filter(g => g.links.length) })); }
+  removeLink(data, lid) { return data.map(j => ({ ...j, groups: j.groups.map(g => ({ ...g, links: g.links.filter(l => l.id !== lid) })) })); }
+
+  save() {
+    const { form, modal } = this.state;
+    const isNewG = form.group === '__new' || !form.group;
+    const adding = modal.mode === 'new';
+    if (!form.title.trim() || (isNewG && !form.newGroup.trim()) || (adding && !form.by.trim())) { this.setState({ tried: true }); return; }
+    const at = nowISO();
+    const old = modal.lid ? this.find(modal.lid)?.l : null;
+    let link;
+    if (adding) {
+      const by = form.by.trim(); this.saveMe(by);
+      const brands = {}; BRANDS.forEach(b => { brands[b.k] = emptyBrand(); });
+      link = { id: uid(), title: form.title.trim(), url: form.url.trim() || FIG, design: form.design, delivery: form.delivery, updated: at, brands, brandTracking: false,
+        designMeta: { by, at }, deliveryMeta: { by, at },
+        changelog: [{ at, author: by, note: 'Link added · Design: ' + DMAP[form.design].label + ' · Delivery: ' + VMAP[form.delivery].label }] };
+    } else {
+      link = { ...old, title: form.title.trim(), url: form.url.trim() || FIG, updated: at, changelog: [...(old.changelog || []), { at, author: this.author(), note: 'Details updated' }] };
+    }
+    let data = this.state.data;
+    if (!adding) {
+      if (modal.jid === form.journey && modal.gid === form.group) {
+        data = data.map(j => j.id !== form.journey ? j : { ...j, groups: j.groups.map(g => g.id !== form.group ? g : { ...g, links: g.links.map(l => l.id === link.id ? link : l) }) });
+        this.commit(data); this.setState({ modal: null }); return;
+      }
+      data = this.removeLink(data, link.id);
+    }
+    data = data.map(j => {
+      if (j.id !== form.journey) return j;
+      if (isNewG) {
+        const existing = j.groups.find(g => g.title.toLowerCase() === form.newGroup.trim().toLowerCase());
+        if (existing) return { ...j, groups: j.groups.map(g => g === existing ? { ...g, links: [...g.links, link] } : g) };
+        return { ...j, groups: [...j.groups, G(form.newGroup.trim(), [link])] };
+      }
+      return { ...j, groups: j.groups.map(g => g.id === form.group ? { ...g, links: [...g.links, link] } : g) };
+    });
+    this.commit(this.prune(data)); this.setState({ modal: null });
+  }
+  del() { const { modal } = this.state; const f = this.find(modal.lid);
+    if (f) this.commitTrash([{ link: f.l, jid: f.j.id, jname: f.j.name, gid: f.g.id, gtitle: f.g.title, deletedAt: Date.now(), by: this.author() }, ...this.state.trash]);
+    this.commit(this.prune(this.removeLink(this.state.data, modal.lid))); this.setState({ modal: null, drawer: null }); }
+
+  requestStatus(lid, kind, brand, to) {
+    const f = this.find(lid); if (!f) return;
+    const from = kind === 'brand' ? f.l.brands[brand].status : f.l[kind];
+    if (from === to) return;
+    this.setState({ pending: { lid, kind, brand, from, to, name: this.state.me, note: '', tried: false } });
+  }
+  confirmStatus() {
+    const p = this.state.pending; const name = p.name.trim();
+    if (!name) { this.setState({ pending: { ...p, tried: true } }); return; }
+    const at = nowISO(); const map = p.kind === 'design' ? DMAP : p.kind === 'delivery' ? VMAP : BMAP;
+    const scope = p.kind === 'brand' ? BRANDS.find(b => b.k === p.brand).name + ' adoption' : p.kind === 'design' ? 'Design status' : 'Delivery status';
+    const entry = { at, author: name, note: scope + ': ' + map[p.from].label + ' → ' + map[p.to].label + (p.note.trim() ? ' — ' + p.note.trim() : '') };
+    this.updateLink(p.lid, x => {
+      const y = { ...x, updated: at, changelog: [...(x.changelog || []), entry] };
+      if (p.kind === 'brand') {
+        const b = { ...x.brands[p.brand], status: p.to, meta: { by: name, at } };
+        if (p.to === 'shared' && !b.sharedDate) b.sharedDate = todayISO();
+        if (p.to === 'audit') b.lastAudit = todayISO();
+        y.brands = { ...x.brands, [p.brand]: b };
+      } else { y[p.kind] = p.to; y[p.kind + 'Meta'] = { by: name, at }; }
+      return y;
+    });
+    this.saveMe(name);
+    this.setState({ pending: null });
+  }
+  setBrandField(lid, bk, field, value) { this.updateLink(lid, x => ({ ...x, updated: nowISO(), brands: { ...x.brands, [bk]: { ...x.brands[bk], [field]: value } } })); }
+
+  exportJson() {
+    // Named directory.json so it can replace the one in the repo as-is.
+    const blob = new Blob([JSON.stringify(leanData(this.state.data), null, 2) + '\n'], { type: 'application/json' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'directory.json'; a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  }
+  importJson(e) {
+    const f = e.target.files && e.target.files[0]; if (!f) return;
+    const r = new FileReader();
+    r.onload = () => { try { const d = JSON.parse(r.result); if (Array.isArray(d) && d.every(j => j.id && Array.isArray(j.groups))) this.commit(normData(d)); else alert('This file is not a valid directory export.'); } catch (err) { alert('Could not read this file.'); } };
+    r.readAsText(f); e.target.value = '';
+  }
+
+  renderVals() {
+    const data = this.state.data || [];
+    const loading = !this.state.data && !this.state.loadError;
+    const { active, fDesign, fDelivery, groupBy, query, form, modal, tried, pending } = this.state;
+    const view = this.state.view || this.props.defaultView || 'journey';
+    // Public site is read-only; add ?edit to the URL to get the editor.
+    const editable = EDIT_MODE || !(this.props.readOnly ?? true);
+    const q = query.trim().toLowerCase();
+    const matchQ = (j, g, l) => !q || l.title.toLowerCase().includes(q) || g.title.toLowerCase().includes(q) || j.name.toLowerCase().includes(q);
+    const matchF = l => (fDesign === 'all' || l.design === fDesign) && (fDelivery === 'all' || l.delivery === fDelivery);
+    const total = j => j.groups.reduce((n, g) => n + g.links.length, 0);
+
+    const journeyNav = [{ id: 'all', letter: '∗', name: 'All journeys', count: data.reduce((n, j) => n + total(j), 0) }, ...data.map(j => ({ id: j.id, letter: j.id, name: j.name, count: total(j) }))]
+      .map(n => { const on = n.id === 'all' ? active.length === 0 : active.includes(n.id); return { ...n, bg: on ? '#fff' : 'transparent', weight: on ? 600 : 400, bar: on ? 1 : 0, tileBg: on ? '#1E22AA' : '#ECF2FF', tileFg: on ? '#fff' : '#1E22AA', pressed: on ? 'true' : 'false', onClick: () => this.setState(s => { if (n.id === 'all') return { active: [] }; const next = s.active.includes(n.id) ? s.active.filter(x => x !== n.id) : [...s.active, n.id]; return { active: next.length === data.length ? [] : next }; }) }; });
+
+    const scoped = data.filter(j => active.length === 0 || active.includes(j.id));
+    const pills = l => BRANDS.map(b => { const s = BMAP[l.brands[b.k].status] || BSTAT[0]; return { short: b.short, color: s.dot, tip: b.name + ': ' + s.label }; });
+    const linkVals = (j, g, l, last) => {
+      const d = DMAP[l.design] || DESIGN[0], v = VMAP[l.delivery] || DELIVERY[0];
+      const short = s => { const t = fmtDT(s); return t; };
+      return { ...l, tracksBrands: !!l.brandTracking, dWhen: short((l.designMeta && l.designMeta.at) || l.updated), vWhen: short((l.deliveryMeta && l.deliveryMeta.at) || l.updated), dLabel: d.label, dType: d.badge, dDesc: d.desc, vLabel: v.label, vType: v.badge, vDesc: v.desc, hasDelivery: l.delivery !== 'none', brandPills: pills(l), updatedText: fmtDT(l.updated), divider: last ? 'transparent' : '#E5E7EB',
+        onEdit: () => this.openEdit(j.id, g.id, l), onOpen: () => this.setState({ drawer: l.id, drafts: { ...EMPTY_DRAFTS } }) };
+    };
+    const sections = scoped.map(j => {
+      const groups = j.groups.map(g => {
+        const links = g.links.filter(l => matchQ(j, g, l) && matchF(l));
+        return { id: g.id, title: g.title, links: links.map((l, i) => linkVals(j, g, l, i === links.length - 1)), onAdd: () => this.openNew(j.id, g.id) };
+      }).filter(g => g.links.length);
+      const n = groups.reduce((m, g) => m + g.links.length, 0);
+      return { letter: j.id, name: j.name, groups, countText: n + (n === 1 ? ' link' : ' links') };
+    }).filter(s => s.groups.length);
+
+    const brandKey = BRANDS.find(b => b.k === groupBy);
+    const colDefs = groupBy === 'design' ? DESIGN : groupBy === 'delivery' ? DELIVERY : BSTAT;
+    const keyOf = l => groupBy === 'design' ? l.design : groupBy === 'delivery' ? l.delivery : l.brands[groupBy].status;
+    const boardCols = colDefs.map(s => {
+      const items = [];
+      scoped.forEach(j => j.groups.forEach(g => g.links.forEach(l => { if (keyOf(l) === s.value && matchQ(j, g, l) && matchF(l)) items.push({ ...linkVals(j, g, l), letter: j.id, group: g.title }); })));
+      items.sort((a, b) => sortKey(b.updated) - sortKey(a.updated));
+      return { label: s.label, badgeType: s.badge, desc: s.desc, count: items.length, items };
+    });
+
+    const fj = data.find(j => j.id === form.journey) || data[0] || { groups: [] };
+    const groupOptions = [...fj.groups.map(g => ({ value: g.id, label: g.title })), { value: '__new', label: '+ New flow…' }];
+    const isNewGroup = form.group === '__new' || (!form.group && fj.groups.length === 0);
+    const titleBad = tried && !form.title.trim();
+    const byBad = tried && modal?.mode === 'new' && !form.by.trim();
+
+    const found = this.state.drawer && this.state.data ? this.find(this.state.drawer) : null;
+    const layout = this.props.drawerLayout || 'tabs';
+    const tab = this.state.drawerTab;
+    let dl = {}, related = [], changelog = [], comments = [], brandCards = [], brandSummary = '';
+    const metaTxt = m => m ? 'Changed by ' + m.by + ' · ' + fmtDT(m.at) : 'No signed change yet';
+    if (found) {
+      const { j, g, l } = found;
+      dl = { ...linkVals(j, g, l), letter: j.id, journeyName: j.name, group: g.title, owner: l.owner || '', dMeta: metaTxt(l.designMeta), vMeta: metaTxt(l.deliveryMeta) };
+      related = (l.related || []).map((r, i) => ({ ...r, onRemove: () => this.updateLink(l.id, x => ({ ...x, related: x.related.filter((_, k) => k !== i) })) }));
+      const log = (l.changelog && l.changelog.length ? l.changelog : [{ at: l.updated, author: 'Cross team', note: 'Design: ' + dl.dLabel + ' · Delivery: ' + dl.vLabel }]).slice().reverse();
+      changelog = log.map((c, i) => ({ ...c, dateText: fmtDT(c.at || c.date), dot: i === 0 ? '#1E22AA' : '#D1D5DC', line: i === log.length - 1 ? 0 : 1 }));
+      comments = (l.comments || []).map(c => ({ ...c, dateText: fmtDT(c.at || c.date) }));
+      const today = todayISO();
+      brandCards = BRANDS.map(b => {
+        const d = l.brands[b.k]; const s = BMAP[d.status] || BSTAT[0];
+        const overdue = d.targetRelease && d.targetRelease < today && d.status !== 'aligned';
+        const open = this.state.brandOpen === b.k;
+        const set = f => e => this.setBrandField(l.id, b.k, f, e.target.value);
+        return { ...d, name: b.name, statusLabel: s.label, statusType: s.badge, open, expanded: open ? 'true' : 'false', headBg: open ? '#F9FAFB' : '#fff', chevron: open ? 'ArrowsChevronTop' : 'ArrowsChevronBottom',
+          targetText: d.targetRelease ? (overdue ? 'Overdue · target ' : 'Target release ') + fmt(d.targetRelease) : 'No target release', targetColor: overdue ? '#DC2626' : '#6A7282', targetWeight: overdue ? 600 : 400,
+          metaText: s.desc + ' · ' + metaTxt(d.meta), hasFigma: !!d.figmaUrl,
+          onToggle: () => this.setState({ brandOpen: open ? null : b.k }),
+          onStatus: v => this.requestStatus(l.id, 'brand', b.k, v),
+          onFigma: set('figmaUrl'), onShared: set('sharedDate'), onBlueprint: set('blueprint'), onOwner: set('owner'), onTarget: set('targetRelease'), onAudit: set('lastAudit'), onAuditLink: set('auditLink'), onNotes: set('auditNotes') };
+      });
+      const aligned = BRANDS.filter(b => l.brands[b.k].status === 'aligned').length;
+      brandSummary = l.brandTracking ? aligned + ' of ' + BRANDS.length + ' brands aligned' : 'Optional';
+      if (!l.brandTracking) brandCards = [];
+    }
+    const lid = found && found.l.id;
+
+    let pend = {};
+    if (pending) {
+      const pf = this.find(pending.lid); const map = pending.kind === 'design' ? DMAP : pending.kind === 'delivery' ? VMAP : BMAP;
+      const bad = pending.tried && !pending.name.trim();
+      pend = { ...pending, linkTitle: pf ? pf.l.title : '', scope: pending.kind === 'brand' ? BRANDS.find(b => b.k === pending.brand).name + ' · Brand adoption' : pending.kind === 'design' ? 'Design status' : 'Delivery status',
+        fromLabel: map[pending.from].label, fromType: map[pending.from].badge, toLabel: map[pending.to].label, toType: map[pending.to].badge,
+        nameHelper: bad ? 'Enter your name to sign this change' : undefined, nameStatus: bad ? 'error' : undefined, when: fmtDT(nowISO()) };
+    }
+
+    const now = Date.now();
+    const binItems = this.state.trash.map(t => { const ms = t.deletedAt + TTL - now; const d = Math.ceil(ms / 86400000), hr = Math.max(1, Math.ceil(ms / 3600000));
+      return { title: t.link.title, where: t.jid + '. ' + t.jname + ' / ' + t.gtitle, by: t.by || 'Cross team', dateText: fmtDT(new Date(t.deletedAt).toISOString()),
+        left: ms >= 86400000 ? d + (d === 1 ? ' day left' : ' days left') : hr + 'h left', leftType: ms >= 86400000 ? 'default' : 'error',
+        onRestore: () => this.restore(t), onPurge: () => this.commitTrash(this.state.trash.filter(x => x !== t)) }; });
+
+    const opts = a => a.map(s => ({ value: s.value, label: s.label, description: s.desc }));
+    return {
+      binOpen: this.state.binOpen, binItems, binEmpty: binItems.length === 0, binHasItems: binItems.length > 0,
+      binLabel: 'Recycle Bin' + (binItems.length ? ' · ' + binItems.length : ''),
+      onOpenBin: () => { this.commitTrash(this.state.trash); this.setState({ binOpen: true }); },
+      onCloseBin: () => this.setState({ binOpen: false }),
+      stop: e => e.stopPropagation(),
+      designOptions: opts(DESIGN), deliveryOptions: opts(DELIVERY), brandStatusOptions: opts(BSTAT),
+      fDesign, fDelivery, groupBy,
+      fDesignOptions: [{ value: 'all', label: 'All' }, ...DESIGN.map(s => ({ value: s.value, label: s.label }))],
+      fDeliveryOptions: [{ value: 'all', label: 'All' }, ...DELIVERY.map(s => ({ value: s.value, label: s.label }))],
+      groupByOptions: [{ value: 'design', label: 'Design status' }, { value: 'delivery', label: 'Delivery status' }, ...BRANDS.map(b => ({ value: b.k, label: b.name + ' adoption' }))],
+      onFDesign: v => this.setState({ fDesign: v }), onFDelivery: v => this.setState({ fDelivery: v }), onGroupBy: v => this.setState({ groupBy: v }),
+      hasFilters: fDesign !== 'all' || fDelivery !== 'all', onClearFilters: () => this.setState({ fDesign: 'all', fDelivery: 'all' }),
+      isBoard: view === 'status',
+      noBrandTracking: !!found && !found.l.brandTracking, canStopTracking: editable && !!found && !!found.l.brandTracking,
+      onTrackOn: () => lid && this.updateLink(lid, x => ({ ...x, brandTracking: true, changelog: [...(x.changelog || []), { at: nowISO(), author: this.author(), note: 'Brand adoption tracking turned on' }] })),
+      onTrackOff: () => lid && this.updateLink(lid, x => ({ ...x, brandTracking: false, changelog: [...(x.changelog || []), { at: nowISO(), author: this.author(), note: 'Brand adoption tracking turned off' }] })),
+      drawerOpen: !!found, dl, related, changelog, comments, brandCards, brandSummary, drafts: this.state.drafts, me: this.state.me,
+      hasRelated: related.length > 0, noRelated: related.length === 0, noComments: comments.length === 0, readOnlyFlag: !editable,
+      showTabs: layout === 'tabs',
+      showOverview: layout !== 'tabs' || tab === 'overview',
+      showBrands: layout !== 'tabs' || tab === 'brands',
+      showChangelog: layout !== 'tabs' || tab === 'changelog',
+      showComments: layout !== 'tabs' || tab === 'comments',
+      drawerTab: tab,
+      drawerTabs: [{ value: 'overview', label: 'Overview' }, { value: 'brands', label: 'Brand adoption' }, { value: 'changelog', label: 'Changelog', badge: changelog.length }, { value: 'comments', label: 'Comments', badge: comments.length || undefined }],
+      onDrawerTab: v => this.setState({ drawerTab: v }),
+      onCloseDrawer: () => this.setState({ drawer: null }),
+      onOpenFigma: () => found && window.open(found.l.url, '_blank', 'noopener'),
+      onDesignChange: v => lid && this.requestStatus(lid, 'design', null, v),
+      onDeliveryChange: v => lid && this.requestStatus(lid, 'delivery', null, v),
+      onOwner: e => lid && this.updateLink(lid, x => ({ ...x, owner: e.target.value })),
+      relTypes: ['Prototype', 'PRD', 'Jira', 'Research', 'Handoff', 'Other'].map(v => ({ value: v, label: v })),
+      onRelLabel: v => this.setDraft({ relLabel: v }),
+      onRelUrl: e => this.setDraft({ relUrl: e.target.value }),
+      onAddRel: () => { const { relLabel, relUrl } = this.state.drafts; if (!lid || !relUrl.trim()) return; this.updateLink(lid, x => ({ ...x, related: [...(x.related || []), { label: relLabel || 'Link', url: relUrl.trim() }] })); this.setDraft({ relUrl: '' }); },
+      onNote: e => this.setDraft({ note: e.target.value }),
+      onAddNote: () => { const n = this.state.drafts.note.trim(); if (!lid || !n) return; const at = nowISO(); this.updateLink(lid, x => ({ ...x, updated: at, changelog: [...(x.changelog || []), { at, author: this.author(), note: n }] })); this.setDraft({ note: '' }); },
+      onMe: e => this.saveMe(e.target.value),
+      onComment: e => this.setDraft({ comment: e.target.value }),
+      onPostComment: () => { const t = this.state.drafts.comment.trim(); if (!lid || !t) return; this.updateLink(lid, x => ({ ...x, comments: [...(x.comments || []), { at: nowISO(), author: this.author(), text: t }] })); this.setDraft({ comment: '' }); },
+      pendOpen: !!pending, pend,
+      onPendName: e => this.setState(s => ({ pending: { ...s.pending, name: e.target.value } })),
+      onPendNote: e => this.setState(s => ({ pending: { ...s.pending, note: e.target.value } })),
+      onPendCancel: () => this.setState({ pending: null }),
+      onPendConfirm: () => this.confirmStatus(),
+      editable, query, view,
+      onQuery: e => this.setState({ query: e.target.value }),
+      onView: v => this.setState({ view: v }),
+      viewOptions: [{ value: 'journey', label: 'By journey' }, { value: 'status', label: 'Board' }],
+      journeyNav, navHint: active.length ? active.length + ' selected' : 'Tap to filter', sections, boardCols,
+      isJourneyView: view === 'journey' && sections.length > 0,
+      isStatusView: view === 'status' && boardCols.some(c => c.items.length),
+      isEmpty: !loading && !this.state.loadError && (view === 'journey' ? sections.length === 0 : !boardCols.some(c => c.items.length)),
+      isLoading: loading, hasLoadError: !!this.state.loadError && !this.state.data, loadErrorText: this.state.loadError,
+      onRetry: () => { this.setState({ loadError: '' }); this.load(true); },
+      showDraftBar: EDIT_MODE && !!this.state.data,
+      draftText: this.state.dirty
+        ? (this.state.newerPublished ? 'You have unpublished local edits, and a newer version has been published since you started. Export, merge if needed, then commit.' : 'You have unpublished local edits. Export directory.json and upload it to the repo (replacing the old one) to publish.')
+        : 'Edit mode: changes stay in this browser until you Export directory.json and upload it to the repo.',
+      draftBg: this.state.dirty ? '#FFF7E6' : '#ECF2FF', draftBorder: this.state.dirty ? '#F5C77E' : '#C6D6FF',
+      canDiscard: EDIT_MODE && this.state.dirty, onDiscard: () => this.discardDraft(),
+      onAddNew: () => this.openNew(),
+      onExport: () => this.exportJson(),
+      onImportClick: () => this.fileRef.current && this.fileRef.current.click(),
+      onImportFile: e => this.importJson(e), fileRef: this.fileRef,
+      modalOpen: !!modal, modalTitle: modal?.mode === 'edit' ? 'Edit link' : 'Add link', isEditing: modal?.mode === 'edit', isAdding: modal?.mode === 'new',
+      form, isNewGroup, groupOptions,
+      journeyOptions: data.map(j => ({ value: j.id, label: j.id + '. ' + j.name })),
+      titleHelper: titleBad ? 'Title is required' : (tried && isNewGroup && !form.newGroup.trim() ? 'Add a flow name above' : undefined),
+      titleStatus: titleBad || (tried && isNewGroup && !form.newGroup.trim()) ? 'error' : undefined,
+      byHelper: byBad ? 'Enter your name to sign this entry' : 'Recorded with the date and time', byStatus: byBad ? 'error' : undefined,
+      onFormJourney: v => this.setForm({ journey: v, group: '' }),
+      onFormGroup: v => this.setForm({ group: v }),
+      onFormNewGroup: e => this.setForm({ newGroup: e.target.value }),
+      onFormTitle: e => this.setForm({ title: e.target.value }),
+      onFormUrl: e => this.setForm({ url: e.target.value }),
+      onFormDesign: v => this.setForm({ design: v }),
+      onFormDelivery: v => this.setForm({ delivery: v }),
+      onFormBy: e => this.setForm({ by: e.target.value }),
+      onClose: () => this.setState({ modal: null }),
+      onSave: () => this.save(), onDelete: () => this.del(),
+    };
+  }
+}
+</script>
+
+</body></html>

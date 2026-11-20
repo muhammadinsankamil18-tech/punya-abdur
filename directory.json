@@ -1,0 +1,651 @@
+[
+  {
+    "id": "A",
+    "name": "Acquire & Activate",
+    "groups": [
+      {
+        "id": "a-onboarding",
+        "title": "Onboarding",
+        "links": [
+          {
+            "id": "a-onboarding--new-prepaid-registration",
+            "title": "New Prepaid Registration",
+            "url": "https://www.figma.com/",
+            "design": "ready",
+            "delivery": "released",
+            "updated": "2026-10-02",
+            "brandTracking": true,
+            "brands": {
+              "xl": {
+                "status": "aligned",
+                "sharedDate": "2026-10-02"
+              },
+              "axis": {
+                "status": "aligned",
+                "sharedDate": "2026-10-02"
+              },
+              "sf": {
+                "status": "progress",
+                "sharedDate": "2026-10-02"
+              }
+            }
+          },
+          {
+            "id": "a-onboarding--postpaid-sign-up",
+            "title": "Postpaid Sign-up",
+            "url": "https://www.figma.com/",
+            "design": "ready",
+            "delivery": "qa",
+            "updated": "2026-10-21",
+            "brandTracking": true,
+            "brands": {
+              "xl": {
+                "status": "shared",
+                "sharedDate": "2026-10-21"
+              },
+              "axis": {
+                "status": "not_shared"
+              },
+              "sf": {
+                "status": "not_shared"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "a-activation",
+        "title": "Activation",
+        "links": [
+          {
+            "id": "a-activation--sim-activation-nik-verification",
+            "title": "SIM Activation (NIK Verification)",
+            "url": "https://www.figma.com/",
+            "design": "ready",
+            "delivery": "iterating",
+            "updated": "2026-09-18",
+            "brandTracking": true,
+            "brands": {
+              "xl": {
+                "status": "aligned",
+                "sharedDate": "2026-09-18"
+              },
+              "axis": {
+                "status": "audit",
+                "sharedDate": "2026-09-18"
+              },
+              "sf": {
+                "status": "submitted",
+                "sharedDate": "2026-09-18"
+              }
+            }
+          },
+          {
+            "id": "a-activation--esim-activation-via-qr",
+            "title": "eSIM Activation via QR",
+            "url": "https://www.figma.com/",
+            "design": "review",
+            "delivery": "none",
+            "updated": "2026-11-12"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "B",
+    "name": "Pay & Monetize",
+    "groups": [
+      {
+        "id": "b-top-up",
+        "title": "Top-up",
+        "links": [
+          {
+            "id": "b-top-up--top-up-via-e-wallet",
+            "title": "Top-up via E-wallet",
+            "url": "https://www.figma.com/",
+            "design": "ready",
+            "delivery": "released",
+            "updated": "2026-09-30",
+            "brandTracking": true,
+            "brands": {
+              "xl": {
+                "status": "aligned",
+                "sharedDate": "2026-09-30"
+              },
+              "axis": {
+                "status": "aligned",
+                "sharedDate": "2026-09-30"
+              },
+              "sf": {
+                "status": "aligned",
+                "sharedDate": "2026-09-30"
+              }
+            }
+          },
+          {
+            "id": "b-top-up--auto-top-up",
+            "title": "Auto Top-up",
+            "url": "https://www.figma.com/",
+            "design": "progress",
+            "delivery": "none",
+            "updated": "2026-11-14"
+          }
+        ]
+      },
+      {
+        "id": "b-purchase-billing",
+        "title": "Purchase & Billing",
+        "links": [
+          {
+            "id": "b-purchase-billing--buy-data-package",
+            "title": "Buy Data Package",
+            "url": "https://www.figma.com/",
+            "design": "ready",
+            "delivery": "released",
+            "updated": "2026-10-08",
+            "brandTracking": true,
+            "brands": {
+              "xl": {
+                "status": "outdated",
+                "sharedDate": "2026-10-08"
+              },
+              "axis": {
+                "status": "aligned",
+                "sharedDate": "2026-10-08"
+              },
+              "sf": {
+                "status": "progress",
+                "sharedDate": "2026-10-08"
+              }
+            }
+          },
+          {
+            "id": "b-purchase-billing--postpaid-bill-payment",
+            "title": "Postpaid Bill Payment",
+            "url": "https://www.figma.com/",
+            "design": "approved",
+            "delivery": "none",
+            "updated": "2026-10-27"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "C",
+    "name": "Use & Control",
+    "groups": [
+      {
+        "id": "c-usage",
+        "title": "Usage",
+        "links": [
+          {
+            "id": "c-usage--quota-balance-overview",
+            "title": "Quota & Balance Overview",
+            "url": "https://www.figma.com/",
+            "design": "ready",
+            "delivery": "released",
+            "updated": "2026-10-11",
+            "brandTracking": true,
+            "brands": {
+              "xl": {
+                "status": "aligned",
+                "sharedDate": "2026-10-11"
+              },
+              "axis": {
+                "status": "submitted",
+                "sharedDate": "2026-10-11"
+              },
+              "sf": {
+                "status": "shared",
+                "sharedDate": "2026-10-11"
+              }
+            }
+          },
+          {
+            "id": "c-usage--usage-history",
+            "title": "Usage History",
+            "url": "https://www.figma.com/",
+            "design": "ready",
+            "delivery": "dev",
+            "updated": "2026-11-03",
+            "brandTracking": true,
+            "brands": {
+              "xl": {
+                "status": "shared",
+                "sharedDate": "2026-11-03"
+              },
+              "axis": {
+                "status": "shared",
+                "sharedDate": "2026-11-03"
+              },
+              "sf": {
+                "status": "not_shared"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "c-controls",
+        "title": "Controls",
+        "links": [
+          {
+            "id": "c-controls--spending-limit",
+            "title": "Spending Limit",
+            "url": "https://www.figma.com/",
+            "design": "validating",
+            "delivery": "none",
+            "updated": "2026-11-17"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "D",
+    "name": "SIM & Lifecycle",
+    "groups": [
+      {
+        "id": "d-sim-replacement",
+        "title": "SIM Replacement",
+        "links": [
+          {
+            "id": "d-sim-replacement--any-to-esim-otp-only",
+            "title": "Any to eSIM (OTP Only)",
+            "url": "https://www.figma.com/",
+            "design": "ready",
+            "delivery": "released",
+            "updated": "2026-10-15",
+            "brandTracking": true,
+            "brands": {
+              "xl": {
+                "status": "aligned",
+                "sharedDate": "2026-10-15"
+              },
+              "axis": {
+                "status": "audit",
+                "sharedDate": "2026-10-15"
+              },
+              "sf": {
+                "status": "progress",
+                "sharedDate": "2026-10-15"
+              }
+            }
+          },
+          {
+            "id": "d-sim-replacement--replacement-any-to-esim",
+            "title": "Replacement Any to eSIM",
+            "url": "https://www.figma.com/",
+            "design": "ready",
+            "delivery": "handed",
+            "updated": "2026-11-05",
+            "brandTracking": true,
+            "brands": {
+              "xl": {
+                "status": "shared",
+                "sharedDate": "2026-11-05"
+              },
+              "axis": {
+                "status": "shared",
+                "sharedDate": "2026-11-05"
+              },
+              "sf": {
+                "status": "shared",
+                "sharedDate": "2026-11-05"
+              }
+            }
+          },
+          {
+            "id": "d-sim-replacement--replacement-any-to-usim",
+            "title": "Replacement Any to uSIM",
+            "url": "https://www.figma.com/",
+            "design": "progress",
+            "delivery": "none",
+            "updated": "2026-11-16"
+          }
+        ]
+      },
+      {
+        "id": "d-lifecycle",
+        "title": "Lifecycle",
+        "links": [
+          {
+            "id": "d-lifecycle--prepaid-to-postpaid-migration",
+            "title": "Prepaid to Postpaid Migration",
+            "url": "https://www.figma.com/",
+            "design": "hold",
+            "delivery": "none",
+            "updated": "2026-11-10"
+          },
+          {
+            "id": "d-lifecycle--number-termination",
+            "title": "Number Termination",
+            "url": "https://www.figma.com/",
+            "design": "ready",
+            "delivery": "release",
+            "updated": "2026-10-24",
+            "brandTracking": true,
+            "brands": {
+              "xl": {
+                "status": "progress",
+                "sharedDate": "2026-10-24"
+              },
+              "axis": {
+                "status": "not_shared"
+              },
+              "sf": {
+                "status": "not_shared"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "E",
+    "name": "Support & Resolution",
+    "groups": [
+      {
+        "id": "e-help-center",
+        "title": "Help Center",
+        "links": [
+          {
+            "id": "e-help-center--faq-search",
+            "title": "FAQ & Search",
+            "url": "https://www.figma.com/",
+            "design": "ready",
+            "delivery": "released",
+            "updated": "2026-09-22",
+            "brandTracking": true,
+            "brands": {
+              "xl": {
+                "status": "aligned",
+                "sharedDate": "2026-09-22"
+              },
+              "axis": {
+                "status": "aligned",
+                "sharedDate": "2026-09-22"
+              },
+              "sf": {
+                "status": "aligned",
+                "sharedDate": "2026-09-22"
+              }
+            }
+          },
+          {
+            "id": "e-help-center--live-chat-escalation",
+            "title": "Live Chat Escalation",
+            "url": "https://www.figma.com/",
+            "design": "draft",
+            "delivery": "none",
+            "updated": "2026-11-13"
+          }
+        ]
+      },
+      {
+        "id": "e-complaints",
+        "title": "Complaints",
+        "links": [
+          {
+            "id": "e-complaints--ticket-tracking",
+            "title": "Ticket Tracking",
+            "url": "https://www.figma.com/",
+            "design": "ready",
+            "delivery": "qa",
+            "updated": "2026-10-30",
+            "brandTracking": true,
+            "brands": {
+              "xl": {
+                "status": "shared",
+                "sharedDate": "2026-10-30"
+              },
+              "axis": {
+                "status": "not_shared"
+              },
+              "sf": {
+                "status": "not_shared"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "F",
+    "name": "Retention & Loyalty",
+    "groups": [
+      {
+        "id": "f-loyalty",
+        "title": "Loyalty",
+        "links": [
+          {
+            "id": "f-loyalty--points-redemption",
+            "title": "Points Redemption",
+            "url": "https://www.figma.com/",
+            "design": "ready",
+            "delivery": "released",
+            "updated": "2026-10-04",
+            "brandTracking": true,
+            "brands": {
+              "xl": {
+                "status": "aligned",
+                "sharedDate": "2026-10-04"
+              },
+              "axis": {
+                "status": "progress",
+                "sharedDate": "2026-10-04"
+              },
+              "sf": {
+                "status": "not_shared"
+              }
+            }
+          },
+          {
+            "id": "f-loyalty--tier-upgrade",
+            "title": "Tier Upgrade",
+            "url": "https://www.figma.com/",
+            "design": "progress",
+            "delivery": "none",
+            "updated": "2026-11-11"
+          }
+        ]
+      },
+      {
+        "id": "f-win-back",
+        "title": "Win-back",
+        "links": [
+          {
+            "id": "f-win-back--churn-save-offer",
+            "title": "Churn Save Offer",
+            "url": "https://www.figma.com/",
+            "design": "approved",
+            "delivery": "none",
+            "updated": "2026-10-19"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "G",
+    "name": "Roaming & International",
+    "groups": [
+      {
+        "id": "g-roaming",
+        "title": "Roaming",
+        "links": [
+          {
+            "id": "g-roaming--roaming-package-purchase",
+            "title": "Roaming Package Purchase",
+            "url": "https://www.figma.com/",
+            "design": "ready",
+            "delivery": "released",
+            "updated": "2026-10-09",
+            "brandTracking": true,
+            "brands": {
+              "xl": {
+                "status": "aligned",
+                "sharedDate": "2026-10-09"
+              },
+              "axis": {
+                "status": "outdated",
+                "sharedDate": "2026-10-09"
+              },
+              "sf": {
+                "status": "submitted",
+                "sharedDate": "2026-10-09"
+              }
+            }
+          },
+          {
+            "id": "g-roaming--roaming-activation",
+            "title": "Roaming Activation",
+            "url": "https://www.figma.com/",
+            "design": "ready",
+            "delivery": "dev",
+            "updated": "2026-10-28",
+            "brandTracking": true,
+            "brands": {
+              "xl": {
+                "status": "shared",
+                "sharedDate": "2026-10-28"
+              },
+              "axis": {
+                "status": "shared",
+                "sharedDate": "2026-10-28"
+              },
+              "sf": {
+                "status": "not_shared"
+              }
+            }
+          },
+          {
+            "id": "g-roaming--international-call-rates",
+            "title": "International Call Rates",
+            "url": "https://www.figma.com/",
+            "design": "review",
+            "delivery": "none",
+            "updated": "2026-11-15"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "H",
+    "name": "Account & Trust",
+    "groups": [
+      {
+        "id": "h-account",
+        "title": "Account",
+        "links": [
+          {
+            "id": "h-account--login-otp",
+            "title": "Login & OTP",
+            "url": "https://www.figma.com/",
+            "design": "ready",
+            "delivery": "released",
+            "updated": "2026-09-26",
+            "brandTracking": true,
+            "brands": {
+              "xl": {
+                "status": "aligned",
+                "sharedDate": "2026-09-26"
+              },
+              "axis": {
+                "status": "aligned",
+                "sharedDate": "2026-09-26"
+              },
+              "sf": {
+                "status": "aligned",
+                "sharedDate": "2026-09-26"
+              }
+            }
+          },
+          {
+            "id": "h-account--profile-kyc-update",
+            "title": "Profile & KYC Update",
+            "url": "https://www.figma.com/",
+            "design": "ready",
+            "delivery": "handed",
+            "updated": "2026-11-02",
+            "brandTracking": true,
+            "brands": {
+              "xl": {
+                "status": "shared",
+                "sharedDate": "2026-11-02"
+              },
+              "axis": {
+                "status": "not_shared"
+              },
+              "sf": {
+                "status": "not_shared"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "h-security",
+        "title": "Security",
+        "links": [
+          {
+            "id": "h-security--device-management",
+            "title": "Device Management",
+            "url": "https://www.figma.com/",
+            "design": "progress",
+            "delivery": "none",
+            "updated": "2026-11-18"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "I",
+    "name": "Others",
+    "groups": [
+      {
+        "id": "i-miscellaneous",
+        "title": "Miscellaneous",
+        "links": [
+          {
+            "id": "i-miscellaneous--notification-center",
+            "title": "Notification Center",
+            "url": "https://www.figma.com/",
+            "design": "draft",
+            "delivery": "none",
+            "updated": "2026-11-09"
+          },
+          {
+            "id": "i-miscellaneous--legacy-home-v1",
+            "title": "Legacy Home v1",
+            "url": "https://www.figma.com/",
+            "design": "deprecated",
+            "delivery": "released",
+            "updated": "2026-06-12",
+            "brandTracking": true,
+            "brands": {
+              "xl": {
+                "status": "aligned",
+                "sharedDate": "2026-06-12"
+              },
+              "axis": {
+                "status": "aligned",
+                "sharedDate": "2026-06-12"
+              },
+              "sf": {
+                "status": "aligned",
+                "sharedDate": "2026-06-12"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+]
